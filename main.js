@@ -1,8 +1,24 @@
 const API_KEY =
   "4d%2FCaHaU%2FxcWl7YFHP1gCuadQb%2BsEZ1N8GxHC15vlhiBeBSeABac3Gy6ZXaPLW%2B4foo%2BlGCypZ83VqolaPjjPg%3D%3D";
 
+const dataParam = getFormattedDate();
+
+function getFormattedDate() {
+  const currentDate = new Date();
+
+  const year = currentDate.getFullYear();
+  const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+  const day = currentDate.getDate().toString().padStart(2, "0");
+
+  const formattedDate = `${year}${month}${day}`;
+
+  return formattedDate;
+}
+
+const formattedDate = getFormattedDate();
+
 async function getWeather() {
-  const url = `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?ServiceKey=${API_KEY}&pageNo=1&numOfRows=20&dataType=json&base_date=20240215&base_time=0500&nx=61&ny=120`;
+  const url = `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?ServiceKey=${API_KEY}&pageNo=1&numOfRows=20&dataType=json&base_date=${dataParam}&base_time=0500&nx=61&ny=120`;
 
   try {
     const response = await fetch(url);
