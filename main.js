@@ -1,20 +1,76 @@
-// DOM이 완전히 로드된 후에 스크립트를 실행하기 위해 대기합니다.
-document.addEventListener("DOMContentLoaded", function () {
-  // 각 div에 표시하고자 하는 내용을 포함한 배열을 정의합니다.
-  const contentArray = ["미세먼지", "초미세먼지", "현재온도", "하늘상태", "강수형태"];
+const API_KEY =
+  "4d%2FCaHaU%2FxcWl7YFHP1gCuadQb%2BsEZ1N8GxHC15vlhiBeBSeABac3Gy6ZXaPLW%2B4foo%2BlGCypZ83VqolaPjjPg%3D%3D";
 
-  // 동적으로 div를 삽입하고자 하는 HTML 내의 컨테이너를 가져옵니다.
-  const contentContainer = document.getElementById("content");
+async function getWeather() {
+  const url = `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?ServiceKey=${API_KEY}&pageNo=1&numOfRows=20&dataType=json&base_date=20240215&base_time=0500&nx=61&ny=120`;
 
-  // 내용 배열의 각 항목을 순회합니다.(반복문)
-  contentArray.forEach((item) => {
-    // 새 div 요소를 생성합니다.
-    const div = document.createElement("div");
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    updateWeatherInfo(data.response.body.items.item);
+    console.log("수원시날씨", data);
+  } catch (error) {
+    console.error("Failed to fetch weather data", error);
+  }
+}
 
-    // 현재 항목의 텍스트로 div의 텍스트 내용을 설정합니다.
-    div.textContent = item;
+function updateWeatherInfo(weatherItems) {
+  let temp = "";
+  let sky = "";
+  let rainType = "";
 
-    // 새롭게 생성된 div를 컨테이너에 추가합니다.
-    contentContainer.appendChild(div);
+  weatherItems.forEach((item) => {
+    switch (item.category) {
+      case "TMP":
+        temp = item.fcstValue + "°C <br><span class='large-emoji'>🌡️</span>";
+
+        break;
+      case "SKY":
+        sky = translateSkyCondition(item.fcstValue);
+        break;
+      case "PTY":
+        rainType = translateRainType(item.fcstValue);
+        break;
+    }
   });
-});
+
+  document.getElementById("temp").innerHTML = temp;
+  document.getElementById("sky").innerHTML = sky;
+  document.getElementById("rainType").innerHTML = rainType;
+}
+
+function translateSkyCondition(value) {
+  switch (value) {
+    case "1":
+      return "맑음<br> <span class='large-emoji'>☀️</span>";
+    case "3":
+      return "구름많음<br> <span class='large-emoji'> ☁️☁️</span>";
+    case "4":
+      return "흐림<br> <span class='large-emoji'>☁️</span>";
+    default:
+      return "정보 없음";
+  }
+}
+
+function translateRainType(value) {
+  switch (value) {
+    case "0":
+      return "없음 <br> <span class='large-emoji'></span>";
+    case "1":
+      return "비<br> <span class='large-emoji'>☔️</span>";
+
+    case "2":
+      return "비/눈<br> <span class='large-emoji'>☔️ &nbsp ☃️</span>";
+
+    case "3":
+      return "눈<br> <span class='large-emoji'>❄️</span>";
+
+    case "4":
+      return "소나기<br> <span class='large-emoji'>🌧️</span>";
+
+    default:
+      return "정보 없음";
+  }
+}
+
+getWeather();
