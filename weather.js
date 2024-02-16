@@ -1,6 +1,8 @@
+//api키 보관
 const API_KEY =
   "4d%2FCaHaU%2FxcWl7YFHP1gCuadQb%2BsEZ1N8GxHC15vlhiBeBSeABac3Gy6ZXaPLW%2B4foo%2BlGCypZ83VqolaPjjPg%3D%3D";
 
+//년월일
 function getFormattedDate() {
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -11,6 +13,7 @@ function getFormattedDate() {
 
 const formattedDate = getFormattedDate();
 
+//시간
 function getBaseTime() {
   const hours = new Date().getHours();
   console.log("현재시간", hours);
@@ -24,6 +27,7 @@ function getBaseTime() {
 
 const baseTime = getBaseTime();
 
+// 통신-날씨정보
 async function getWeather() {
   const url = `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?ServiceKey=${API_KEY}&pageNo=1&numOfRows=15&dataType=json&base_date=${formattedDate}&base_time=${baseTime}&nx=61&ny=120`;
 
@@ -42,6 +46,7 @@ async function getWeather() {
   }
 }
 
+// 날씨별 정보 업데이트
 function updateWeatherInfo(weatherItems) {
   let temp = "";
   let sky = "";
@@ -51,7 +56,6 @@ function updateWeatherInfo(weatherItems) {
     switch (item.category) {
       case "TMP":
         temp = item.fcstValue + "°C <br><span class='large-emoji'>🌡️</span>";
-
         break;
       case "SKY":
         sky = translateSkyCondition(item.fcstValue);
