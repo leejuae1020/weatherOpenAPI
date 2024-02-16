@@ -14,7 +14,7 @@ const formattedDate = getFormattedDate();
 function getBaseTime() {
   const hours = new Date().getHours();
   console.log("현재시간", hours);
-  const validTimes = [2, 5, 8, 11, 14, 17, 20, 23]; // 정해진 시간대
+  const validTimes = [2, 5, 8, 11, 14, 17, 20, 23]; // 업데이트 정해진 시간대
   const closestPastTime = validTimes
     .slice()
     .reverse()
@@ -34,6 +34,9 @@ async function getWeather() {
     console.log("수원시날씨", data);
     console.log("날짜", formattedDate);
     console.log("기준시간", baseTime);
+
+    document.getElementById("formattedDate").innerText = formattedDate;
+    document.getElementById("baseTime").innerText = `${baseTime.slice(0, 2)}시 기준`;
   } catch (error) {
     console.error("Failed to fetch weather data", error);
   }
@@ -99,3 +102,4 @@ function translateRainType(value) {
 }
 
 getWeather();
+setInterval(getWeather, 10800000); // 10800000ms = 3시간마다 함수를 다시 호출하면서 자동업데이트

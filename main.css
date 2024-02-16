@@ -1,3 +1,23 @@
+.suwon-weather {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin-top: 150px;
+}
+
+#formattedDate {
+  margin-right: 5px;
+}
+
+.data {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: -10px;
+  width: 100%;
+}
+
 #content {
   display: flex;
   flex-wrap: wrap;
@@ -5,7 +25,7 @@
   justify-content: center;
   gap: 10px;
   font-weight: bold;
-  margin-top: 200px;
+  margin-top: 50px;
 }
 
 #content p {
@@ -20,7 +40,7 @@
   margin-top: 10px;
   justify-content: center;
   text-align: center;
-  color: blue;
+  color: rgb(0, 0, 255);
 }
 
 #content .large-emoji {
@@ -32,16 +52,16 @@
 .weather-temp,
 .weather-state-text,
 .RN1 {
-  width: 200px;
-  height: 200px;
-  border: 2px solid black;
+  width: 180px;
+  height: 180px;
   border-radius: 40px;
   margin: 10px;
   padding: 10px;
   box-sizing: border-box;
   display: flex;
-
   justify-content: center;
   text-align: center;
   overflow: hidden;
+  background-color: rgba(255, 196, 215, 0.598);
+  box-shadow: 10px 10px 10px rgb(237, 187, 187);
 }
