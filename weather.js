@@ -106,4 +106,3 @@ function translateRainType(value) {
 }
 
 getWeather();
-setInterval(getWeather, 10800000); // 10800000ms = 3시간마다 함수를 다시 호출하면서 자동업데이트

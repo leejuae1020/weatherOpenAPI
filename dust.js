@@ -13,14 +13,14 @@ const dustFormattedDate = dustGetFormattedDate();
 // console.log("미세먼지용 날짜", dustFormattedDate);
 
 async function getDust() {
-  const url = `http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?sidoName=경기&pageNo=1&numOfRows=20&returnType=json&serviceKey=${API_KEY}&ver=1.0`;
+  const url = `http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?sidoName=경기&pageNo=1&numOfRows=100&returnType=json&serviceKey=${API_KEY}&ver=1.0`;
 
   try {
     const response = await fetch(url);
     const data = await response.json();
     updateDustInfo(data.response.body.items);
     updateDust25Info(data.response.body.items);
-    // console.log("미세먼지경기", data.response.body.items);
+
     console.log(
       "인계동 미세먼지",
       data.response.body.items.find((item) => item.stationName === "인계동")
@@ -33,13 +33,13 @@ async function getDust() {
 function gradeToQuality(grade) {
   switch (grade) {
     case "1":
-      return "좋음";
+      return "<span class='large-emoji'>😍</span>";
     case "2":
-      return "보통";
+      return "<span class='large-emoji'>😗</span>";
     case "3":
-      return "나쁨";
+      return "<span class='large-emoji'>☹️</span>";
     case "4":
-      return "매우나쁨";
+      return "<span class='large-emoji'>😡</span>";
     default:
       return "Unknown";
   }
@@ -52,7 +52,7 @@ function updateDustInfo(dustItems) {
   dustItems.forEach((item) => {
     if (item.stationName === "인계동") {
       const quality = gradeToQuality(item.pm10Grade);
-      pm10Text = `${item.pm10Value}㎍/㎥ - ${quality}<br>`;
+      pm10Text = `${item.pm10Value}㎍/㎥ <br> ${quality}`;
     }
   });
 
@@ -66,12 +66,11 @@ function updateDust25Info(dustItems) {
   dustItems.forEach((item) => {
     if (item.stationName === "인계동") {
       const quality = gradeToQuality(item.pm25Grade);
-      // Assuming pm25Value should be displayed even if it's "-", showing quality
-      pm25Text = `${item.pm25Value}㎍/㎥ - ${quality}<br>`;
+      pm25Text = `${item.pm25Value}㎍/㎥ <br>${quality}`;
     }
   });
 
-  document.getElementById("pm25").innerHTML = pm25Text; // Corrected getItemById to getElementById
+  document.getElementById("pm25").innerHTML = pm25Text;
 }
 
 getDust();
