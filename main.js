@@ -3,30 +3,37 @@ const API_KEY =
 
 function getFormattedDate() {
   const currentDate = new Date();
-
   const year = currentDate.getFullYear();
   const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
   const day = currentDate.getDate().toString().padStart(2, "0");
-
-  const formattedDate = `${year}${month}${day}`;
-
-  return formattedDate;
+  return `${year}${month}${day}`;
 }
 
 const formattedDate = getFormattedDate();
 
-const hours = ("0" + new Date().getHours()).slice(-2) + "00";
-console.log("시간", hours);
+function getBaseTime() {
+  const hours = new Date().getHours();
+  console.log("현재시간", hours);
+  const validTimes = [2, 5, 8, 11, 14, 17, 20, 23]; // 정해진 시간대
+  const closestPastTime = validTimes
+    .slice()
+    .reverse()
+    .find((time) => hours >= time);
+  return closestPastTime !== undefined ? `0${closestPastTime}`.slice(-2) + "00" : "2300";
+}
+
+const baseTime = getBaseTime();
 
 async function getWeather() {
-  const url = `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?ServiceKey=${API_KEY}&pageNo=1&numOfRows=15&dataType=json&base_date=${formattedDate}&base_time=${hours}&nx=61&ny=120`;
+  const url = `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?ServiceKey=${API_KEY}&pageNo=1&numOfRows=15&dataType=json&base_date=${formattedDate}&base_time=${baseTime}&nx=61&ny=120`;
 
   try {
     const response = await fetch(url);
     const data = await response.json();
     updateWeatherInfo(data.response.body.items.item);
     console.log("수원시날씨", data);
-    console.log("formattedDate", formattedDate);
+    console.log("날짜", formattedDate);
+    console.log("기준시간", baseTime);
   } catch (error) {
     console.error("Failed to fetch weather data", error);
   }
