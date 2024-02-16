@@ -1,8 +1,6 @@
 const API_KEY =
   "4d%2FCaHaU%2FxcWl7YFHP1gCuadQb%2BsEZ1N8GxHC15vlhiBeBSeABac3Gy6ZXaPLW%2B4foo%2BlGCypZ83VqolaPjjPg%3D%3D";
 
-const dataParam = getFormattedDate();
-
 function getFormattedDate() {
   const currentDate = new Date();
 
@@ -17,14 +15,18 @@ function getFormattedDate() {
 
 const formattedDate = getFormattedDate();
 
+const hours = ("0" + new Date().getHours()).slice(-2) + "00";
+console.log("시간", hours);
+
 async function getWeather() {
-  const url = `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?ServiceKey=${API_KEY}&pageNo=1&numOfRows=20&dataType=json&base_date=${dataParam}&base_time=0500&nx=61&ny=120`;
+  const url = `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?ServiceKey=${API_KEY}&pageNo=1&numOfRows=15&dataType=json&base_date=${formattedDate}&base_time=${hours}&nx=61&ny=120`;
 
   try {
     const response = await fetch(url);
     const data = await response.json();
     updateWeatherInfo(data.response.body.items.item);
     console.log("수원시날씨", data);
+    console.log("formattedDate", formattedDate);
   } catch (error) {
     console.error("Failed to fetch weather data", error);
   }
@@ -71,7 +73,7 @@ function translateSkyCondition(value) {
 function translateRainType(value) {
   switch (value) {
     case "0":
-      return "없음 <br> <span class='large-emoji'></span>";
+      return "없음 <br> <span class='large-emoji'>❌</span>";
     case "1":
       return "비<br> <span class='large-emoji'>☔️</span>";
 
