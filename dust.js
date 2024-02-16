@@ -30,34 +30,48 @@ async function getDust() {
   }
 }
 
+function gradeToQuality(grade) {
+  switch (grade) {
+    case "1":
+      return "좋음";
+    case "2":
+      return "보통";
+    case "3":
+      return "나쁨";
+    case "4":
+      return "매우나쁨";
+    default:
+      return "Unknown";
+  }
+}
+
 // 미세먼지 정보 업데이트
 function updateDustInfo(dustItems) {
-  let pm10 = "";
+  let pm10Text = "";
 
   dustItems.forEach((item) => {
-    switch (item.stationName) {
-      case "인계동":
-        pm10 = item.pm10Value + "㎍/㎥ <br>";
-        break;
+    if (item.stationName === "인계동") {
+      const quality = gradeToQuality(item.pm10Grade);
+      pm10Text = `${item.pm10Value}㎍/㎥ - ${quality}<br>`;
     }
   });
 
-  document.getElementById("pm10").innerHTML = pm10;
+  document.getElementById("pm10").innerHTML = pm10Text; // Corrected getItemById to getElementById
 }
 
 // 초미세먼지 정보 업데이트
 function updateDust25Info(dustItems) {
-  let pm25 = "";
+  let pm25Text = "";
 
   dustItems.forEach((item) => {
-    switch (item.stationName) {
-      case "인계동":
-        pm25 = item.pm25Value + "㎍/㎥ <br>";
-        break;
+    if (item.stationName === "인계동") {
+      const quality = gradeToQuality(item.pm25Grade);
+      // Assuming pm25Value should be displayed even if it's "-", showing quality
+      pm25Text = `${item.pm25Value}㎍/㎥ - ${quality}<br>`;
     }
   });
 
-  document.getElementById("pm25").innerHTML = pm25;
+  document.getElementById("pm25").innerHTML = pm25Text; // Corrected getItemById to getElementById
 }
 
 getDust();
